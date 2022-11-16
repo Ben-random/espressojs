@@ -1,5 +1,5 @@
 function nextNum(num) {
-    return num + 1
+    return (num + 1)
 }
 
 module.exports = nextNum

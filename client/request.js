@@ -1,34 +1,44 @@
 const fetch = require('isomorphic-fetch')
 
-let body = {
-    'end': false,
-    "num": 0
-}
-
-async function sendReqs(body) {
-    const url = "http://localhost:3002/nextNum"
+async function sendReqs() {
+    let body = {
+        "end": false,
+        "num": 0
+    }
+    const url = "http://localhost:3005/nextNum/"
     const response = await fetch(url, {
         method: 'POST',
-        body: body.json(),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body),
     })
     const data = await response.json()
     const token = data.token
-    body.token = token
+    body["token"] = token
+    let promises = []
     for (let i = 0; i < 5; i++) {
-        body.num = i
-        await fetch(url, {
+        body["num"] += 1
+        promises.push(fetch(url, {
             method: 'POST',
-            body: body.json(),
-        })
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body),
+        }))
     }
-    body.num = 5
-    body.end = true
+    Promise.all(promises).then((p) => {})
+    body["num"] = 5
+    body["end"] = true
     const res = await fetch(url, {
         method: 'POST',
-        body: body.json(),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body),
     })
     const d = await res.json()
-    console.log("responses: ", d, d.response)
+    console.log("response: ", d.response["result"])
 }
 
-sendReqs(body)
+sendReqs()
