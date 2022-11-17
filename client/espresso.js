@@ -8,7 +8,6 @@ class Espresso {
         this.token = ""
     }
     async request(url, body, start, end) {
-        const url = url
         for (key in body) {
             this.body[key] = body[key]
         }
