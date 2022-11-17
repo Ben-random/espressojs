@@ -1,5 +1,6 @@
 const fetch = require('isomorphic-fetch')
-import Espreso from "./espresso"
+import { Espreso } from "./espresso"
+
 async function sendReqs() {
     let body = {
         "end": false,
@@ -41,5 +42,9 @@ async function sendReqs() {
     console.log("response: ", d.response["result"])
 }
 
+const api = new Espreso()
+body = {"num": 5}
+const url = "https://localhost:3005"
+api.request(url, body, false)
 
-sendReqs()
+//sendReqs()
