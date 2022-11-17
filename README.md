@@ -12,4 +12,4 @@ Use:
 - On client side, initiate an instance of Espresso class
 
 - On all calls except the last call, use ```instance.request(url, body, false) ```
-- On final call set ```instance.request(url, body, false, true) ``` to a variable or return the function call as this returns the batched results.
+- On final call set ```instance.request(url, body, true) ``` to a variable or return the function call as this returns the batched results.
