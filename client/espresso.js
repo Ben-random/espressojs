@@ -10,21 +10,35 @@ class Espresso {
         this.calls += 1
     }
     async request(url, body, end) {
-        for (key in body) {
+        for (const key in body) {
             this.body[key] = body[key]
         }
+        try {
+
+        } catch (error) {
+            console.log(error)
+        }
         if (this.calls > 1) {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(body),
-            })
-            const data = await response.json()
-            this.token = data.token
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(body),
+                })
+                const data = await response.json()
+                if (data.status === 200) {
+                    this.token = data.token
+                } else {
+                    throw new Error(data.status, data.statusText)
+                }
+            } catch (error) {
+                console.log(error)
+            }
         } else {
-            this.body['token'] = this.token
+            try {
+                this.body['token'] = this.token
             if (end) {
                 this.body["end"] = true
                 const res = await fetch(url, {
@@ -35,10 +49,17 @@ class Espresso {
                     body: JSON.stringify(body),
                 })
                 const d = await res.json()
-                return d.response
+                if (d.status === 200) {
+                    return d.response
+                } else {
+                    throw new Error(d.status, d.statusText)
+                }
+            }
+            } catch (error) {
+                console.log(error)
             }
         }
     }
 }
 
-export { Espresso }
+module.exports = { Espresso }
